@@ -15,7 +15,7 @@
 
         public string MainImg { get; set; } = string.Empty;
 
-        public List<MovieImage> SubImages { get; set; } = new();
+        public List<MovieImage> SubImages { get; set; } 
 
         public int CategoryId { get; set; }
         public Category Category { get; set; } 
