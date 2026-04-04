@@ -1,0 +1,93 @@
+﻿@model List<CinemaSystemManagement.Models.customer.Transaction>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<style>
+    body {
+        background: #0f172a;
+        color: #e2e8f0;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .page-header { text-align: center; margin-bottom: 2.5rem; }
+    .page-subtitle { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #f1f5f9; margin: 0; }
+    .page-divider { width: 48px; height: 2px; background: #c9974a; margin: 14px auto 0; border-radius: 2px; }
+
+    .stats-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 2.5rem; }
+    .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px 24px; text-align: center; }
+    .stat-value { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #c9974a; }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; }
+
+    .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+
+    .movie-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+    .movie-card:hover { border-color: #c9974a; transform: translateY(-3px); }
+
+    .movie-poster { position: relative; width: 100%; aspect-ratio: 2/3; background: #0f172a; overflow: hidden; }
+    .movie-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .price-badge { position: absolute; top: 10px; right: 10px; background: #c9974a; color: #2a1a00; font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 6px; }
+
+    .movie-info { padding: 14px; }
+    .movie-name { font-weight: 500; font-size: 14px; color: #f1f5f9; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .movie-date { font-size: 12px; color: #64748b; margin: 0 0 12px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .movie-price { font-family: 'Playfair Display', serif; font-size: 1rem; color: #c9974a; }
+
+    .btn-delete { font-size: 12px; color: #f87171; border: 1px solid #7f1d1d; background: transparent; border-radius: 6px; padding: 5px 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; text-decoration: none; }
+    .btn-delete:hover { background: rgba(239, 68, 68, 0.12); color: #fca5a5; }
+
+    .empty-state { text-align: center; padding: 4rem 1rem; color: #64748b; }
+</style>
+
+<div class="container py-5">
+
+    <div class="page-header">
+        <p class="page-subtitle">Your collection</p>
+        <h2 class="page-title">My Movies</h2>
+        <div class="page-divider"></div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">@Model.Count</div>
+                <div class="stat-label">Films</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$@Model.Sum(t => t.Price).ToString("0.##")</div>
+                <div class="stat-label">Total spent</div>
+            </div>
+        </div>
+
+        <div class="movies-grid">
+            @foreach (var t in Model)
+            {
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img src="/images/movies/@t.MovieImg"
+                             onerror="this.src='/img/default.jpg'"
+                             alt="@t.MovieName" />
+                        <span class="price-badge">$@t.Price</span>
+                    </div>
+                    <div class="movie-info">
+                        <p class="movie-name" title="@t.MovieName">@t.MovieName</p>
+                        <p class="movie-date">@t.Date.ToString("dd MMM yyyy")</p>
+                        <div class="card-footer">
+                            <span class="movie-price">$@t.Price</span>
+                            <a href="/Home/DeleteTransaction?id=@t.Id" class="btn-delete">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <p>No movies yet. Start adding some!</p>
+        </div>
+    }
+
+</div>

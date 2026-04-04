@@ -1,0 +1,67 @@
+﻿@model Movie
+
+<div class="container py-5">
+
+    <div class="row mb-5">
+
+        <div class="col-md-4">
+            <img src="/images/movies/@Model.MainImg" class="w-100 rounded" />
+        </div>
+
+        <div class="col-md-8">
+            <h1>@Model.Name</h1>
+
+            <p class="text-info">@Model.Status</p>
+
+            <p>@Model.Description</p>
+
+            <p><b>Price:</b> @Model.Price</p>
+            <p><b>Category:</b> @Model.Category?.CategoryName</p>
+            <p><b>Cinema:</b> @Model.Cinema?.Name</p>
+            
+            <a href="/Home/AddTransaction?id=@Model.Id" class="btn btn-success">
+                Buy Now
+            </a>
+        </div>
+
+
+    </div>
+
+  
+
+    <h3 class="mb-3">🎭 Cast</h3>
+
+    <div class="row mb-5">
+        @foreach (var item in Model.MovieActors)
+        {
+            <div class="col-md-2 text-center">
+
+                <img src="/images/actors/@item.Actor.Img"
+                     class="w-100 rounded-circle mb-2"
+                     style="height:120px; object-fit:cover;" />
+
+                <p>@item.Actor.Name</p>
+
+            </div>
+        }
+    </div>
+
+    <h3>📸 More Images</h3>
+
+    <div class="row">
+        @foreach (var img in Model.SubImages)
+        {
+            <div class="col-md-3 mb-3">
+                <img src="/images/movies/sub/@img.ImageUrl"
+                     class="img-fluid rounded" />
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+
+
+
