@@ -18,11 +18,11 @@
         public List<MovieImage> SubImages { get; set; } = new();
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = new();
+        public Category Category { get; set; } 
 
         public int CinemaId { get; set; }
         public Cinema Cinema { get; set; }= new();
 
-        public List<MovieActor> MovieActors { get; set; } = new();
+        public List<MovieActor> MovieActors { get; set; } 
     }
 }

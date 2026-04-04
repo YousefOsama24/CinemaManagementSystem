@@ -27,15 +27,7 @@
         }
     </select>
 
-    <select name="actorIds" multiple class="form-control mb-3">
-        @foreach (var a in Model.Actors)
-        {
-            <option value="@a.Id" selected="@(Model.SelectedActors.Contains(a.Id))">
-                @a.Name
-            </option>
-        }
-    </select>
-
+   
     <button class="btn btn-warning">Update</button>
 
 </form>
