@@ -3,8 +3,9 @@ using CinemaSystemManagement.Areas.Customer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CinemaSystemManagement.Areas.Customer.Controllers {
-    [Area("Customer")] 
+namespace CinemaSystemManagement.Areas.Customer.Controllers
+{
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly AppDbContext db;
@@ -14,15 +15,28 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers {
             db = context;
         }
 
-        public IActionResult Index(int page = 1, string search = "")
+        // ================== INDEX ==================
+        public IActionResult Index()
         {
+            return View();
+        }
+
+        // ================== MOVIES (FIXED) ==================
+        public IActionResult Movie(int page = 1, string search = "")
+        {
+            if (page < 1) page = 1;
+
             int pageSize = 3;
 
-            var moviesQuery = db.Movies.AsQueryable();
+            var moviesQuery = db.Movies
+                .Include(m => m.Category)
+                .AsQueryable();
 
+            // SEARCH
             if (!string.IsNullOrEmpty(search))
             {
-                moviesQuery = moviesQuery.Where(m => m.Name.Contains(search));
+                moviesQuery = moviesQuery
+                    .Where(m => m.Name.Contains(search));
             }
 
             int totalMovies = moviesQuery.Count();
@@ -39,6 +53,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers {
             return View(movies);
         }
 
+        // ================== DETAILS ==================
         public IActionResult Details(int id)
         {
             var movie = db.Movies
@@ -55,6 +70,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers {
             return View(movie);
         }
 
+        // ================== CATEGORIES ==================
         public IActionResult Categories()
         {
             var categories = db.Categories
@@ -64,20 +80,33 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers {
             return View(categories);
         }
 
+        // ================== CATEGORY MOVIES ==================
         public IActionResult CategoryMovies(int id)
         {
-            var movies = db.Movies.Where(m => m.CategoryId == id).ToList();
+            var category = db.Categories
+                .FirstOrDefault(c => c.Id == id);
 
-            ViewBag.CategoryName = db.Categories.FirstOrDefault(c => c.Id == id)?.CategoryName;
+            if (category == null)
+                return NotFound();
+
+            var movies = db.Movies
+                .Where(m => m.CategoryId == id)
+                .ToList();
+
+            ViewBag.CategoryName = category.CategoryName;
 
             return View(movies);
         }
 
+        // ================== TRANSACTIONS ==================
         public IActionResult Transactions()
         {
-            return View(db.Transactions.ToList());
+            var transactions = db.Transactions.ToList();
+            return View(transactions);
         }
 
+        // ================== ADD TRANSACTION (SAFE) ==================
+        [HttpPost]
         public IActionResult AddTransaction(int id)
         {
             var movie = db.Movies.Find(id);
@@ -99,12 +128,15 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers {
             return RedirectToAction("Transactions");
         }
 
+        // ================== DELETE TRANSACTION (SAFE) ==================
+        [HttpPost]
         public IActionResult DeleteTransaction(int id)
         {
             var t = db.Transactions.Find(id);
 
             if (t == null)
                 return NotFound();
+
             db.Transactions.Remove(t);
             db.SaveChanges();
 

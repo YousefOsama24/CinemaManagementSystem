@@ -1,0 +1,222 @@
+/* ================= GLOBAL ================= */
+body {
+    background: #f8fafc;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ================= HEADER ================= */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+    .admin-header h2 {
+        font-weight: bold;
+    }
+
+/* BUTTONS */
+.actions a {
+    margin-left: 10px;
+}
+
+.btn-add {
+    background: #0ea5e9;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.btn-dashboard {
+    background: #10b981;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+/* ================= TABLE ================= */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    /* HEADER */
+    .movie-table thead {
+        background: #0f172a;
+        color: white;
+    }
+
+    .movie-table th {
+        padding: 16px;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    /* BODY */
+    .movie-table td {
+        padding: 16px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    /* HOVER */
+    .movie-table tbody tr:hover {
+        background: #f1f5f9;
+    }
+
+/* IMAGE */
+.img-cell img {
+    width: 60px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* STATUS */
+.status {
+    background: #22c55e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* ACTION BUTTONS */
+.btn-edit {
+    background: orange;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+/* ================= MOVIES GRID ================= */
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* CARD */
+.movie-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+    .movie-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* IMAGE */
+    .movie-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+    }
+
+/* INFO */
+.movie-info {
+    padding: 12px;
+    text-align: center;
+}
+
+.movie-name {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+/* BUTTON */
+.movie-btn {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: #0ea5e9;
+    color: white;
+    border-radius: 6px;
+}
+
+/* ================= SEARCH ================= */
+.search-box {
+    display: block;
+    width: 300px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* ================= PAGINATION ================= */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.page-btn {
+    padding: 8px 14px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+}
+
+    .page-btn:hover {
+        background: #0ea5e9;
+        color: white;
+    }
+
+.active-page {
+    background: #0ea5e9;
+    color: white;
+}
+
+/* ================= STATS ================= */
+.stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 150px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0ea5e9;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #64748b;
+}

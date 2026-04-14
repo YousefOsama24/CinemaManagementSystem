@@ -1,3 +1,0 @@
-﻿internal class MovieRepo : IMovieRepo
-{
-}

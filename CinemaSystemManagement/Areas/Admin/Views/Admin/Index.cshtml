@@ -1,95 +1,71 @@
-﻿@model List<CinemaSystemManagement.Areas.Customer.Models.Movie>
+﻿
+<link href="~/css/admin-movie.css" rel="stylesheet" />
 
-<div class="container py-5">
 
-    <h2 class="mb-4 text-center">🎬 Admin Dashboard</h2>
+<div class="admin-movie-page">
 
-    <!-- زرار إضافة فيلم -->
-    <a asp-area="Admin"
-           asp-controller="Admin"
-           asp-action="Create"
-           class="btn btn-success mb-4">
-        + Add Movie
-    </a>
+    <div class="admin-header">
+        <h2>🎬 Admin Dashboard</h2>
+        
+        <div class="actions">
 
-    <!-- جدول الأفلام -->
-    <table class="table table-dark table-striped text-center align-middle">
+            <a asp-area="Admin"
+                   asp-controller="Admin"
+                   asp-action="Create"
+                   class="btn-add">
+                + Add Movie
+            </a>
 
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+            <a asp-area="Customer"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="btn-dashboard">
+                Dashboard
+            </a>
 
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
+        </div>
+    </div>
+
+    <div class="table-container">
+
+        <table class="movie-table">
+
+            <thead>
+                <tr>
+                    <th style="width:100px;">Image</th>
+                    <th>Name</th>
+                    <th style="width:150px;">Category</th>
+                    <th style="width:120px;">Price</th>
+                    <th style="width:120px;">Status</th>
+                    <th style="width:160px;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
                 @foreach (var m in Model)
                 {
                     <tr>
-
-                        <!-- صورة -->
-                        <td>
-                            <img src="/images/movies/@(m.MainImg ?? "default.jpg")"
-                                 width="80"
-                                 class="rounded" />
+                        <td class="img-cell">
+                            <img src="/images/movies/@(m.MainImg ?? "default.jpg")" class="movie-img" />
                         </td>
 
-                        <!-- الاسم -->
                         <td>@m.Name</td>
-
-                        <!-- الكاتيجوري -->
                         <td>@m.Category?.CategoryName</td>
-
-                        <!-- السعر -->
                         <td>$@m.Price</td>
 
-                        <!-- الحالة -->
                         <td>
-                            <span class="badge bg-info">
-                                @m.Status
-                            </span>
+                            <span class="status available">@m.Status</span>
                         </td>
 
-                        <!-- الأزرار -->
                         <td>
-
-                            <!-- Edit -->
-                            <a asp-area="Admin"
-                                   asp-controller="Admin"
-                                   asp-action="Edit"
-                                   asp-route-id="@m.Id"
-                                   class="btn btn-warning btn-sm">
-                                Edit
-                            </a>
-
-                            <!-- Delete -->
-                            <a asp-area="Admin"
-                                   asp-controller="Admin"
-                                   asp-action="Delete"
-                                   asp-route-id="@m.Id"
-                                   class="btn btn-danger btn-sm">
-                                Delete
-                            </a>
-
+                            <a asp-action="Edit" asp-route-id="@m.Id" class="btn-edit">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@m.Id" class="btn-delete">Delete</a>
                         </td>
-
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6">No Movies Found ❌</td>
-                </tr>
-            }
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
 
+    </div>
 </div>

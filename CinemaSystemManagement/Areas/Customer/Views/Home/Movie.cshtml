@@ -1,0 +1,70 @@
+﻿@model List<CinemaSystemManagement.Areas.Customer.Models.Movie>
+
+<link href="~/css/admin-movie.css" rel="stylesheet" />
+
+<div class="container-fluid">
+
+    <h2 class="text-center mb-4">🎬 Movies</h2>
+
+    <form method="get"
+          asp-area="Customer"
+          asp-controller="Home"
+          asp-action="Movie">
+
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="search-box"
+               placeholder="Search movie..." />
+    </form>
+
+
+
+
+    <div class="row">
+
+        @foreach (var movie in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <a asp-area="Customer"
+                       asp-controller="Home"
+                       asp-action="Details"
+                       asp-route-id="@movie.Id">
+
+                    <div class="movie-card">
+
+                        <img src="/images/movies/@movie.MainImg" class="movie-img" />
+
+                        <div class="movie-info">
+                            <h4>@movie.Name</h4>
+                            <p>@movie.Status</p>
+                            <span class="btn btn-info">Details</span>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+    <div class="pagination">
+
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+        <a asp-controller="Home"
+               asp-action="Movie"
+               asp-route-page="@i"
+               asp-route-search="@ViewBag.Search"
+               class="page-btn @(i == (int)ViewBag.CurrentPage ? "active-page" : "")">
+            @i
+        </a>
+        }
+
+    </div>
+
+

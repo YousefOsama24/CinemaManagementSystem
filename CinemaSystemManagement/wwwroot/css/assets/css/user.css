@@ -1,0 +1,32 @@
+/* -------------------------------------------------------------------------- */
+/*                                Falcon Button                               */
+/* -------------------------------------------------------------------------- */
+/* prettier-ignore */
+/*# sourceMappingURL=user.css.map */
+.navbar-vertical {
+    position: fixed;
+    width: 260px;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+
+.content {
+    margin-left: 260px;
+    padding: 30px;
+}
+
+@media (max-width: 991px) {
+    .navbar-vertical {
+        transform: translateX(-100%);
+        transition: 0.3s;
+    }
+
+        .navbar-vertical.show {
+            transform: translateX(0);
+        }
+
+    .content {
+        margin-left: 0;
+    }
+}

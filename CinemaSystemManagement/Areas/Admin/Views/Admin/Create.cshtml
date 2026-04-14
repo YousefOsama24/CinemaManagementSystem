@@ -1,23 +1,46 @@
 ﻿@model CinemaSystemManagement.Areas.Customer.Models.ViewModels.MovieVM
-<form method="post" enctype="multipart/form-data" class="container py-5">
 
-    <input name="Movie.Name" class="form-control mb-3" placeholder="Name" />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
 
-    <textarea name="Movie.Description" class="form-control mb-3"></textarea>
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Movie.Name" class="form-control" />
+        <span asp-validation-for="Movie.Name" class="text-danger"></span>
+    </div>
 
-    <input name="Movie.Price" class="form-control mb-3" placeholder="Price" />
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="Movie.Description" class="form-control"></textarea>
+        <span asp-validation-for="Movie.Description" class="text-danger"></span>
+    </div>
 
-    <input name="Movie.Status" class="form-control mb-3" placeholder="Status" />
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="Movie.Price" class="form-control" />
+        <span asp-validation-for="Movie.Price" class="text-danger"></span>
+    </div>
 
-    <input type="file" name="MainImg" class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Status</label>
+        <input asp-for="Movie.Status" class="form-control" />
+    </div>
 
-    <input type="file" name="SubImgs" multiple class="form-control mb-3" />
+    <div class="mb-3">
+        <label>Category</label>
+        <select asp-for="Movie.CategoryId" class="form-control">
+            @foreach (var c in Model.Categories)
+            {
+                <option value="@c.Id">@c.CategoryName</option>
+            }
+        </select>
+    </div>
 
-    <select asp-for="Movie.CategoryId"
-            class="form-control mb-3"
-            asp-items="@(new SelectList(Model.Categories, "Id", "CategoryName"))">
-    </select>
+    <div class="mb-3">
+        <label>Main Image</label>
+        <input type="file" name="MainImg" class="form-control" />
+    </div>
 
-    <button class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 
 </form>
+

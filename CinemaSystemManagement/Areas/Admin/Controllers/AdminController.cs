@@ -1,38 +1,36 @@
-﻿using CinemaSystemManagement.Data;
+﻿using CinemaSystemManagement.Areas.Customer.Models;
 using CinemaSystemManagement.Areas.Customer.Models.ViewModels;
-using CinemaSystemManagement.Areas.Customer.Models;
+using CinemaSystemManagement.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CinemaSystemManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class AdminController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IMovieRepo repo;
 
-        public AdminController(AppDbContext context)
+        public AdminController(IMovieRepo _repo)
         {
-            _context = context;
+            repo = _repo;
         }
 
+        // ================= INDEX =================
         public IActionResult Index()
         {
-            var movies = _context.Movies
-                .Include(m => m.Category)
-                .ToList();
-
+            var movies = repo.GetAll();
             return View(movies);
         }
 
-        // CREATE 
+        // ================= CREATE =================
+
         [HttpGet]
         public IActionResult Create()
         {
             var vm = new MovieVM
             {
-                Categories = _context.Categories.ToList(),
-                Actors = _context.Actors.ToList()
+                Categories = repo.GetCategories(),
+                Actors = repo.GetActors()
             };
 
             return View(vm);
@@ -41,7 +39,15 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(MovieVM vm, IFormFile MainImg, List<IFormFile> SubImgs, List<int> actorIds)
         {
-            if (vm.Movie == null) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fix the errors";
+
+                vm.Categories = repo.GetCategories();
+                vm.Actors = repo.GetActors();
+
+                return View(vm);
+            }
 
             var movie = new Movie
             {
@@ -66,67 +72,38 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
                 movie.MainImg = fileName;
             }
 
-            _context.Movies.Add(movie);
-            _context.SaveChanges();
+            repo.Add(movie);
 
             // Actors
             if (actorIds != null)
             {
-                foreach (var id in actorIds)
-                {
-                    _context.MovieActors.Add(new MovieActor
-                    {
-                        MovieId = movie.Id,
-                        ActorId = id
-                    });
-                }
+                repo.AddActors(movie.Id, actorIds);
             }
 
             // Sub Images
             if (SubImgs != null)
             {
-                foreach (var img in SubImgs)
-                {
-                    if (img.Length > 0)
-                    {
-                        var fileName = Guid.NewGuid() + Path.GetExtension(img.FileName);
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies/sub", fileName);
-
-                        using (var stream = System.IO.File.Create(path))
-                        {
-                            img.CopyTo(stream);
-                        }
-
-                        _context.MovieImages.Add(new MovieImage
-                        {
-                            MovieId = movie.Id,
-                            ImageUrl = fileName
-                        });
-                    }
-                }
+                repo.AddSubImages(movie.Id, SubImgs);
             }
 
-            _context.SaveChanges();
-
+            TempData["Success"] = "Movie added successfully!";
             return RedirectToAction("Index");
         }
 
-        // EDIT 
+        // ================= EDIT =================
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var movie = _context.Movies
-                .Include(m => m.MovieActors)
-                .FirstOrDefault(m => m.Id == id);
+            var movie = repo.GetById(id);
 
             if (movie == null) return NotFound();
 
             var vm = new MovieVM
             {
                 Movie = movie,
-                Categories = _context.Categories.ToList(),
-                Actors = _context.Actors.ToList(),
-                SelectedActors = movie.MovieActors.Select(a => a.ActorId).ToList()
+                Categories = repo.GetCategories(),
+                Actors = repo.GetActors()
             };
 
             return View(vm);
@@ -135,90 +112,32 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(MovieVM vm, IFormFile MainImg, List<IFormFile> SubImgs, List<int> actorIds)
         {
-            var movie = _context.Movies
-                .Include(m => m.MovieActors)
-                .Include(m => m.SubImages)
-                .FirstOrDefault(m => m.Id == vm.Movie.Id);
-
-            if (movie == null) return NotFound();
-
-            // Update Data
-            movie.Name = vm.Movie.Name;
-            movie.Description = vm.Movie.Description;
-            movie.Price = vm.Movie.Price;
-            movie.Status = vm.Movie.Status;
-            movie.CategoryId = vm.Movie.CategoryId;
-
-            // Main Img
-            if (MainImg != null)
+            if (!ModelState.IsValid)
             {
-                var fileName = Guid.NewGuid() + Path.GetExtension(MainImg.FileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies", fileName);
+                TempData["Error"] = "Please fix the errors";
 
-                using (var stream = System.IO.File.Create(path))
-                {
-                    MainImg.CopyTo(stream);
-                }
+                vm.Categories = repo.GetCategories();
+                vm.Actors = repo.GetActors();
 
-                movie.MainImg = fileName;
+                return View(vm);
             }
 
-            // Update Actors
-            _context.MovieActors.RemoveRange(movie.MovieActors);
+            repo.Update(vm, MainImg, SubImgs, actorIds);
 
-            if (actorIds != null)
-            {
-                foreach (var id in actorIds)
-                {
-                    _context.MovieActors.Add(new MovieActor
-                    {
-                        MovieId = movie.Id,
-                        ActorId = id
-                    });
-                }
-            }
-
-            // Replace SubImages
-            if (SubImgs != null && SubImgs.Count > 0)
-            {
-                _context.MovieImages.RemoveRange(movie.SubImages);
-
-                foreach (var img in SubImgs)
-                {
-                    if (img.Length > 0)
-                    {
-                        var fileName = Guid.NewGuid() + Path.GetExtension(img.FileName);
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies/sub", fileName);
-
-                        using (var stream = System.IO.File.Create(path))
-                        {
-                            img.CopyTo(stream);
-                        }
-
-                        _context.MovieImages.Add(new MovieImage
-                        {
-                            MovieId = movie.Id,
-                            ImageUrl = fileName
-                        });
-                    }
-                }
-            }
-
-            _context.SaveChanges();
-
+            TempData["Success"] = "Movie updated successfully!";
             return RedirectToAction("Index");
         }
 
-        // DELETE 
+        // ================= DELETE =================
+
         public IActionResult Delete(int id)
         {
-            var movie = _context.Movies.Find(id);
+            bool deleted = repo.Delete(id);
 
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-                _context.SaveChanges();
-            }
+            if (deleted)
+                TempData["Success"] = "Movie deleted successfully!";
+            else
+                TempData["Error"] = "Movie not found!";
 
             return RedirectToAction("Index");
         }
