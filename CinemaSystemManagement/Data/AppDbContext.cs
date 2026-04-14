@@ -1,14 +1,16 @@
-﻿using CinemaSystemManagement.Models;
-using CinemaSystemManagement.Models.customer;
+﻿using CinemaSystemManagement.Areas.Customer.Models;
 using Microsoft.EntityFrameworkCore;
-namespace CinemaSystem.Data
+namespace CinemaSystemManagement.Data
 {
     public class AppDbContext : DbContext
     {
-        
-            
-        
-            protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
+        {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
                 "Server=3MOELJO\\SQLEXPRESS;Database=CinemaDB;Trusted_Connection=True;TrustServerCertificate=True;");

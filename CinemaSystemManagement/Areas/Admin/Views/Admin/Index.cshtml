@@ -1,0 +1,95 @@
+﻿@model List<CinemaSystemManagement.Areas.Customer.Models.Movie>
+
+<div class="container py-5">
+
+    <h2 class="mb-4 text-center">🎬 Admin Dashboard</h2>
+
+    <!-- زرار إضافة فيلم -->
+    <a asp-area="Admin"
+           asp-controller="Admin"
+           asp-action="Create"
+           class="btn btn-success mb-4">
+        + Add Movie
+    </a>
+
+    <!-- جدول الأفلام -->
+    <table class="table table-dark table-striped text-center align-middle">
+
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var m in Model)
+                {
+                    <tr>
+
+                        <!-- صورة -->
+                        <td>
+                            <img src="/images/movies/@(m.MainImg ?? "default.jpg")"
+                                 width="80"
+                                 class="rounded" />
+                        </td>
+
+                        <!-- الاسم -->
+                        <td>@m.Name</td>
+
+                        <!-- الكاتيجوري -->
+                        <td>@m.Category?.CategoryName</td>
+
+                        <!-- السعر -->
+                        <td>$@m.Price</td>
+
+                        <!-- الحالة -->
+                        <td>
+                            <span class="badge bg-info">
+                                @m.Status
+                            </span>
+                        </td>
+
+                        <!-- الأزرار -->
+                        <td>
+
+                            <!-- Edit -->
+                            <a asp-area="Admin"
+                                   asp-controller="Admin"
+                                   asp-action="Edit"
+                                   asp-route-id="@m.Id"
+                                   class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <!-- Delete -->
+                            <a asp-area="Admin"
+                                   asp-controller="Admin"
+                                   asp-action="Delete"
+                                   asp-route-id="@m.Id"
+                                   class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">No Movies Found ❌</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>

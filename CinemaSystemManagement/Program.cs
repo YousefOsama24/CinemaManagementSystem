@@ -1,31 +1,50 @@
-using CinemaSystem.Data;
-using CinemaSystem.Services;
+﻿using CinemaSystemManagement.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace CinemaSystemManagement
+var builder = WebApplication.CreateBuilder(args);
+
+
+// 🔥 Add Services
+builder.Services.AddControllersWithViews();
+
+
+// 🔥 Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+// 🔥 Repository (SOLID)
+builder.Services.AddScoped<IMovieRepo, MovieRepo>();
+
+
+var app = builder.Build();
+
+
+// 🔥 Middleware
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Services
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<FileService>();
-            builder.Services.AddDbContext<AppDbContext>();
-
-            var app = builder.Build();
-
-            // Middleware
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseRouting();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
-        }
-    }
+    app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+
+// 🔥 IMPORTANT: Area Routing (لازم يكون قبل العادي)
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+
+
+// 🔥 Default Route (Customer)
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
+);
+
+
+app.Run();

@@ -1,0 +1,101 @@
+﻿@using CinemaSystemManagement.Areas.Customer.Models
+@model List<Movie>
+
+<style>
+    body {
+        background: #0f172a;
+        color: white;
+    }
+
+    .movie-card {
+        background: rgba(255,255,255,0.05);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.4s;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        height: 100%;
+    }
+
+    .movie-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px #00d4ff;
+    }
+
+    .movie-img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .movie-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .movie-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .movie-btn {
+        margin-top: 10px;
+        display: inline-block;
+        background: #00d4ff;
+        color: black;
+        padding: 8px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+</style>
+
+
+<div class="container py-5">
+
+
+
+    <h2 class="text-center mb-5">🎬 @ViewBag.CategoryName</h2>
+
+    <div class="row g-4">
+
+        @foreach (var movie in Model)
+        {
+            
+            <div class="col-lg-4 col-md-6 col-sm-12">
+
+                <a asp-area="Customer"
+                       asp-controller="Home"
+                       asp-action="Details"
+                       asp-route-id="@movie.Id">
+
+                    <div class="movie-card">
+
+                        <img src="/images/movies/@movie.MainImg"
+                             onerror="this.src='/img/default.jpg'"
+                             class="movie-img" />
+
+
+
+                        <div class="movie-info">
+                            <div class="movie-name">@movie.Name</div>
+
+                            <div class="movie-btn">
+                                Details
+                            </div>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

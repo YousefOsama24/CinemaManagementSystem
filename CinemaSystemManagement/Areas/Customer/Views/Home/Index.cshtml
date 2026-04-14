@@ -1,0 +1,139 @@
+﻿@model List<CinemaSystemManagement.Areas.Customer.Models.Movie>
+
+<style>
+    body {
+        background: #0f172a;
+        color: white;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 30px;
+        outline: none;
+    }
+
+    .movies-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .movie-card {
+        background: rgba(255,255,255,0.05);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.4s;
+        cursor: pointer;
+    }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #00d4ff;
+        }
+
+    .movie-img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+    }
+
+    .movie-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .movie-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .page-btn {
+        margin: 5px;
+        padding: 8px 15px;
+        background: #00d4ff;
+        border-radius: 8px;
+        cursor: pointer;
+        color: black;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .active-page {
+        background: #ffcc00;
+    }
+</style>
+
+<div class="container py-5">
+
+    <h2 class="text-center mb-4">🎬 Movies</h2>
+
+    <form method="get"
+          asp-area="Customer"
+          asp-controller="Home"
+          asp-action="Index">
+
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="search-box"
+               placeholder="Search movie..." />
+    </form>
+
+
+
+
+    <div class="row">
+
+        @foreach (var movie in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <a asp-area="Customer"
+                       asp-controller="Home"
+                       asp-action="Details"
+                       asp-route-id="@movie.Id">
+
+                    <div class="movie-card">
+
+                        <img src="/images/movies/@movie.MainImg" class="movie-img" />
+
+                        <div class="movie-info">
+                            <h4>@movie.Name</h4>
+                            <p>@movie.Status</p>
+                            <span class="btn btn-info">Details</span>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+    <div class="pagination">
+
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+        <a asp-controller="Home"
+               asp-action="Index"
+               asp-route-page="@i"
+               asp-route-search="@ViewBag.Search"
+               class="page-btn @(i == (int)ViewBag.CurrentPage ? "active-page" : "")">
+            @i
+        </a>
+        }
+
+    </div>
+
+</div>

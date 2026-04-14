@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace CinemaSystem.Services
+namespace CinemaSystemManagement.Services
 {
     public enum ImgType
     {

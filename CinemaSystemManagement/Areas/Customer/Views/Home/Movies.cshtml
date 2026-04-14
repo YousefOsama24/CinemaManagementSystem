@@ -1,0 +1,31 @@
+﻿@model List<CinemaSystemManagement.Areas.Customer.Models.Movie>
+
+<div class="container py-5">
+
+    <h2 class="text-center mb-5">@ViewBag.CategoryName</h2>
+
+    <div class="row g-4">
+
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-4">
+
+                <a href="/Customer/Home/Details?id=@movie.Id">
+
+                    <div class="movie-card">
+
+                        <img src="/images/movies/@movie.MainImg" class="movie-img" />
+
+                        <div class="movie-info">
+                            <h5>@movie.Name</h5>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+</div>
