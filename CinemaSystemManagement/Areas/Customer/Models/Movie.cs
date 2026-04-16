@@ -12,7 +12,7 @@ namespace CinemaSystemManagement.Areas.Customer.Models
         public string Description { get; set; } = string.Empty;
 
 
-        [Range(10, 1000, ErrorMessage = "Price must be between 10 and 1000")]
+        [Range(50, 1000, ErrorMessage = "Price must be between 50 and 1000")]
         [PriceValidation(ErrorMessage = "Price must be at least 50")]
         public decimal Price { get; set; }
 
