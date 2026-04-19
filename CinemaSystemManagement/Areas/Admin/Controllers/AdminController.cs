@@ -1,4 +1,4 @@
-﻿using CinemaSystemManagement.Areas.Customer.Models;
+﻿using CinemaSystemManagement.Models;
 using CinemaSystemManagement.Models.ViewModels;
 using CinemaSystemManagement.Services;
 using Microsoft.AspNetCore.Mvc;

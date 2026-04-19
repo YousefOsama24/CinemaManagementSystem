@@ -1,4 +1,4 @@
-﻿using CinemaSystemManagement.Areas.Customer.Models.Validations;
+﻿using CinemaSystemManagement.Models.Validations;
 using System.ComponentModel.DataAnnotations;
 
 namespace CinemaSystemManagement.Models

@@ -1,5 +1,5 @@
 using CinemaSystemManagement.Data;
-using CinemaSystemManagement.Areas.Customer.Models;
+using CinemaSystemManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
