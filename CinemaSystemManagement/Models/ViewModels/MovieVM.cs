@@ -1,4 +1,6 @@
-﻿namespace CinemaSystemManagement.Areas.Customer.Models.ViewModels
+﻿using CinemaSystemManagement.Models;
+
+namespace CinemaSystemManagement.Models.ViewModels
 {
     public class MovieVM
     {

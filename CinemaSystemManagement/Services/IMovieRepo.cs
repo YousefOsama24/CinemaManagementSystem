@@ -1,5 +1,5 @@
-﻿using CinemaSystemManagement.Areas.Customer.Models;
-using CinemaSystemManagement.Areas.Customer.Models.ViewModels;
+﻿using CinemaSystemManagement.Models;
+using CinemaSystemManagement.Models.ViewModels;
 namespace CinemaSystemManagement.Services
 {
     public interface IMovieRepo

@@ -1,4 +1,4 @@
-﻿using CinemaSystemManagement.Areas.Customer.Models;
+﻿using CinemaSystemManagement.Models;
 using Microsoft.EntityFrameworkCore;
 namespace CinemaSystemManagement.Data
 {

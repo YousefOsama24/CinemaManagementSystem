@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CinemaSystemManagement.Areas.Customer.Models.Validations
+namespace CinemaSystemManagement.Models.Validations
 {
     
         public class PriceValidation : ValidationAttribute

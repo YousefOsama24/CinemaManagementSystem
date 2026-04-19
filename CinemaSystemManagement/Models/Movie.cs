@@ -1,7 +1,7 @@
 ﻿using CinemaSystemManagement.Areas.Customer.Models.Validations;
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaSystemManagement.Areas.Customer.Models
+namespace CinemaSystemManagement.Models
 {
     public class Movie
     {

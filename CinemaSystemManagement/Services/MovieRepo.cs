@@ -1,7 +1,8 @@
 ﻿using CinemaSystemManagement.Data;
 using CinemaSystemManagement.Areas.Customer.Models;
-using CinemaSystemManagement.Areas.Customer.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using CinemaSystemManagement.Models;
+using CinemaSystemManagement.Models.ViewModels;
 
 namespace CinemaSystemManagement.Services
 {
