@@ -4,7 +4,7 @@ namespace CinemaSystemManagement.Models.ViewModels
 {
     public class MovieVM
     {
-        public Movie Movie { get; set; } = new();
+        public Products Movie { get; set; } = new();
 
         public List<Category> Categories { get; set; } = new();
         public List<Actor> Actors { get; set; } = new();

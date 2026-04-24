@@ -98,26 +98,65 @@
                                                         </div>
                                                     </a>
                                                     <ul class="nav collapse show" id="dashboard">
+                                                        
                                                         <li class="nav-item">
-                                                            <a class="nav-link"
-                                                                   asp-area="Admin"
-                                                                   asp-controller="Admin"
-                                                                   asp-action="Index">
+
+                                                            <a class="nav-link dropdown-indicator"
+                                                                   data-bs-toggle="collapse"
+                                                                   href="#cinemaSystem">
+
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="nav-link-text ps-1">Admin Movie</span>
+                                                                    <span class="nav-link-icon">
+                                                                        <span class="fas fa-film"></span>
+                                                                    </span>
+                                                                    <span class="nav-link-text ps-1">Cinema System</span>
                                                                 </div>
                                                             </a>
+
+                                                            <ul class="nav collapse"
+                                                                id="cinemaSystem"
+                                                                data-bs-parent="#sidebarMenu">
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link"
+                                                                           asp-area="Admin"
+                                                                           asp-controller="Home"
+                                                                           asp-action="Index">
+                                                                        Manage Movies
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link"
+                                                                           asp-area="Customer"
+                                                                           asp-controller="Home"
+                                                                           asp-action="Categories">
+                                                                        Categories
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link"
+                                                                           asp-area="Customer"
+                                                                           asp-controller="Home"
+                                                                           asp-action="Movie">
+                                                                        Browse Movies
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link"
+                                                                           asp-area="Customer"
+                                                                           asp-controller="Home"
+                                                                           asp-action="Transactions">
+                                                                        Transactions
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
                                                         </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link"
-                                                                   asp-area="Customer"
-                                                                   asp-controller="Home"
-                                                                   asp-action="Movie">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="nav-link-text ps-1">Movies</span>
-                                                                </div>
-                                                            </a>
-                                                        </li>
+
+                                                    </ul>
                                                         <li class="nav-item">
                                                             <a class="nav-link" href="dashboard/analytics.html">
                                                                 <div class="d-flex align-items-center">
@@ -1124,6 +1163,7 @@
 
 
                                     <div class="main-content">
+                                    @RenderSection("Scripts", required: false)
 
                                         <!-- 🔔 Notification هنا -->
                                         <div class="container mt-3">

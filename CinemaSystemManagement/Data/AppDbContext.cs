@@ -10,38 +10,29 @@ namespace CinemaSystemManagement.Data
         : base(options)
         {
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseSqlServer(
-                "Server=3MOELJO\\SQLEXPRESS;Database=CinemaDB;Trusted_Connection=True;TrustServerCertificate=True;");
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
-        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Products> Products { get; set; }
         public DbSet<Actor> Actors { get; set; }
         public DbSet<MovieActor> MovieActors { get; set; }
         public DbSet<MovieImage> MovieImages { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; } 
+        public DbSet<Order> Orders { get; set; } 
+        public DbSet<Cart> Carts { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<MovieActor>()
-            .HasKey(ma => new { ma.MovieId, ma.ActorId });
+        
 
-            modelBuilder.Entity<MovieActor>()
-                .HasOne(ma => ma.Movie)
-                .WithMany(m => m.MovieActors)
-                .HasForeignKey(ma => ma.MovieId);
-
-            modelBuilder.Entity<MovieActor>()
-                .HasOne(ma => ma.Actor)
-                .WithMany(a => a.MovieActors)
-                .HasForeignKey(ma => ma.ActorId);
-
-            base.OnModelCreating(modelBuilder);
-
-        }
+        
 
         
     }

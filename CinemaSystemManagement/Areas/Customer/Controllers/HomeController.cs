@@ -28,7 +28,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
 
             int pageSize = 3;
 
-            var moviesQuery = db.Movies
+            var moviesQuery = db.Products
                 .Include(m => m.Category)
                 .AsQueryable();
 
@@ -56,7 +56,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
         // ================== DETAILS ==================
         public IActionResult Details(int id)
         {
-            var movie = db.Movies
+            var movie = db.Products
                 .Include(m => m.Category)
                 .Include(m => m.Cinema)
                 .Include(m => m.SubImages)
@@ -89,7 +89,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
             if (category == null)
                 return NotFound();
 
-            var movies = db.Movies
+            var movies = db.Products
                 .Where(m => m.CategoryId == id)
                 .ToList();
 
@@ -109,7 +109,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
         [HttpPost]
         public IActionResult AddTransaction(int id)
         {
-            var movie = db.Movies.Find(id);
+            var movie = db.Products.Find(id);
 
             if (movie == null)
                 return NotFound();

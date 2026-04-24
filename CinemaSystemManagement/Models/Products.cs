@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CinemaSystemManagement.Models
 {
-    public class Movie
+    public class Products
     {
         public int Id { get; set; }
 
@@ -22,7 +22,7 @@ namespace CinemaSystemManagement.Models
 
         public string MainImg { get; set; } = string.Empty;
 
-        public List<MovieImage> SubImages { get; set; } 
+        public List<MovieImage> SubImages { get; set; } = new();
 
         public int CategoryId { get; set; }
         public Category Category { get; set; } 
@@ -30,6 +30,6 @@ namespace CinemaSystemManagement.Models
         public int CinemaId { get; set; }
         public Cinema Cinema { get; set; }= new();
 
-        public List<MovieActor> MovieActors { get; set; } 
+        public List<MovieActor> MovieActors { get; set; } = new();
     }
 }

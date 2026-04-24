@@ -1,6 +1,7 @@
 /* ================= GLOBAL ================= */
 body {
     background: #f8fafc;
+    color: #1e293b;
     font-family: 'DM Sans', sans-serif;
 }
 
@@ -14,9 +15,10 @@ body {
 
     .admin-header h2 {
         font-weight: bold;
+        color: #0f172a;
     }
 
-/* BUTTONS */
+/* ================= BUTTONS ================= */
 .actions a {
     margin-left: 10px;
 }
@@ -38,23 +40,34 @@ body {
 }
 
 /* ================= TABLE ================= */
-.table-container {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-}
 
-.movie-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+
+
 
     /* HEADER */
     .movie-table thead {
-        background: #0f172a;
-        color: white;
+        background: white;
+        color: #1e293b;
+        border-bottom: 2px solid #eee;
     }
+
+    /* CELLS */
+    .movie-table th {
+        padding: 16px;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    .movie-table td {
+        padding: 16px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    .movie-table tbody tr:hover {
+        background: #f1f5f9;
+    }
+   
 
     .movie-table th {
         padding: 16px;
@@ -62,19 +75,17 @@ body {
         text-align: left;
     }
 
-    /* BODY */
     .movie-table td {
         padding: 16px;
         border-bottom: 1px solid #eee;
         vertical-align: middle;
     }
 
-    /* HOVER */
     .movie-table tbody tr:hover {
         background: #f1f5f9;
     }
 
-/* IMAGE */
+/* ================= IMAGE ================= */
 .img-cell img {
     width: 60px;
     height: 85px;
@@ -82,7 +93,7 @@ body {
     border-radius: 8px;
 }
 
-/* STATUS */
+/* ================= STATUS ================= */
 .status {
     background: #22c55e;
     color: white;
@@ -91,7 +102,7 @@ body {
     font-size: 12px;
 }
 
-/* ACTION BUTTONS */
+/* ================= ACTION BUTTONS ================= */
 .btn-edit {
     background: orange;
     color: white;
@@ -111,11 +122,11 @@ body {
 /* ================= MOVIES GRID ================= */
 .movies-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 20px;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .movie-card {
     background: white;
     border-radius: 14px;
@@ -128,14 +139,14 @@ body {
         transform: translateY(-5px);
     }
 
-    /* IMAGE */
-    .movie-card img {
-        width: 100%;
-        height: 280px;
-        object-fit: cover;
-    }
+/* ================= IMAGE ================= */
+.movie-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
 
-/* INFO */
+/* ================= INFO ================= */
 .movie-info {
     padding: 12px;
     text-align: center;
@@ -146,7 +157,7 @@ body {
     color: #1e293b;
 }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
 .movie-btn {
     margin-top: 10px;
     display: inline-block;

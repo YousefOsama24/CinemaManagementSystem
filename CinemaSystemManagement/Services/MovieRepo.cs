@@ -1,57 +1,43 @@
 ﻿using CinemaSystemManagement.Data;
 using CinemaSystemManagement.Models;
-using Microsoft.EntityFrameworkCore;
-using CinemaSystemManagement.Models;
 using CinemaSystemManagement.Models.ViewModels;
+using CinemaSystemManagement.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaSystemManagement.Services
 {
     public class MovieRepo : IMovieRepo
     {
         private readonly AppDbContext _context;
+        private readonly FileService _fileService;
 
-        public MovieRepo(AppDbContext context)
+        public MovieRepo(AppDbContext context, FileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
-        public List<Movie> GetAll()
+        public List<Products> GetAll()
         {
-            return _context.Movies.Include(m => m.Category).ToList();
+            return _context.Products
+                .Include(x => x.Category)
+                .ToList();
         }
 
-        public Movie GetById(int id)
+        public Products GetById(int id)
         {
-            return _context.Movies
-                .Include(m => m.MovieActors)
-                .Include(m => m.SubImages)
-                .FirstOrDefault(m => m.Id == id);
+            return _context.Products
+                .Include(x => x.Category)
+                .Include(x => x.MovieActors)
+                .ThenInclude(ma => ma.Actor)
+                .Include(x => x.SubImages)
+                .FirstOrDefault(x => x.Id == id);
         }
 
-        public void Add(Movie movie)
+        public void Add(Products movie)
         {
-            _context.Movies.Add(movie);
+            _context.Products.Add(movie);
             _context.SaveChanges();
-        }
-
-        public bool Delete(int id)
-        {
-            var movie = _context.Movies.Find(id);
-            if (movie == null) return false;
-
-            _context.Movies.Remove(movie);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public List<Category> GetCategories()
-        {
-            return _context.Categories.ToList();
-        }
-
-        public List<Actor> GetActors()
-        {
-            return _context.Actors.ToList();
         }
 
         public void AddActors(int movieId, List<int> actorIds)
@@ -70,22 +56,15 @@ namespace CinemaSystemManagement.Services
 
         public void AddSubImages(int movieId, List<IFormFile> images)
         {
-            foreach (var img in images)
+            foreach (var file in images)
             {
-                if (img.Length > 0)
+                var fileName = _fileService.Upload(file, ImgType.Sub);
+
+                _context.MovieImages.Add(new MovieImage
                 {
-                    var fileName = Guid.NewGuid() + Path.GetExtension(img.FileName);
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies/sub", fileName);
-
-                    using var stream = System.IO.File.Create(path);
-                    img.CopyTo(stream);
-
-                    _context.MovieImages.Add(new MovieImage
-                    {
-                        MovieId = movieId,
-                        ImageUrl = fileName
-                    });
-                }
+                    MovieId = movieId,
+                    ImageUrl = fileName
+                });
             }
 
             _context.SaveChanges();
@@ -93,12 +72,7 @@ namespace CinemaSystemManagement.Services
 
         public void Update(MovieVM vm, IFormFile MainImg, List<IFormFile> SubImgs, List<int> actorIds)
         {
-            var movie = _context.Movies
-                .Include(m => m.MovieActors)
-                .Include(m => m.SubImages)
-                .FirstOrDefault(m => m.Id == vm.Movie.Id);
-
-            if (movie == null) return;
+            var movie = GetById(vm.Movie.Id);
 
             movie.Name = vm.Movie.Name;
             movie.Description = vm.Movie.Description;
@@ -108,16 +82,15 @@ namespace CinemaSystemManagement.Services
 
             if (MainImg != null)
             {
-                var fileName = Guid.NewGuid() + Path.GetExtension(MainImg.FileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies", fileName);
+                if (!string.IsNullOrEmpty(movie.MainImg))
+                    _fileService.Delete(movie.MainImg, ImgType.Main);
 
-                using var stream = System.IO.File.Create(path);
-                MainImg.CopyTo(stream);
-
-                movie.MainImg = fileName;
+                movie.MainImg = _fileService.Upload(MainImg, ImgType.Main);
             }
 
-            _context.MovieActors.RemoveRange(movie.MovieActors);
+            // Update actors
+            var oldActors = _context.MovieActors.Where(x => x.MovieId == movie.Id);
+            _context.MovieActors.RemoveRange(oldActors);
 
             if (actorIds != null)
             {
@@ -131,30 +104,33 @@ namespace CinemaSystemManagement.Services
                 }
             }
 
-            if (SubImgs != null && SubImgs.Count > 0)
+            // Add sub images
+            if (SubImgs != null)
             {
-                _context.MovieImages.RemoveRange(movie.SubImages);
-
-                foreach (var img in SubImgs)
-                {
-                    if (img.Length > 0)
-                    {
-                        var fileName = Guid.NewGuid() + Path.GetExtension(img.FileName);
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies/sub", fileName);
-
-                        using var stream = System.IO.File.Create(path);
-                        img.CopyTo(stream);
-
-                        _context.MovieImages.Add(new MovieImage
-                        {
-                            MovieId = movie.Id,
-                            ImageUrl = fileName
-                        });
-                    }
-                }
+                AddSubImages(movie.Id, SubImgs);
             }
 
             _context.SaveChanges();
+        }
+
+        public bool Delete(int id)
+        {
+            var movie = GetById(id);
+            if (movie == null) return false;
+
+            _context.Products.Remove(movie);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public List<Category> GetCategories()
+        {
+            return _context.Categories.ToList();
+        }
+
+        public List<Actor> GetActors()
+        {
+            return _context.Actors.ToList();
         }
     }
 }

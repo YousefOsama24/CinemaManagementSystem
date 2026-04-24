@@ -1,24 +1,27 @@
 ﻿using CinemaSystemManagement.Models;
 using CinemaSystemManagement.Models.ViewModels;
 using CinemaSystemManagement.Services;
+using CinemaSystemManagement.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaSystemManagement.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class AdminController : Controller
+    [Area(SD.ADMIN_AREA)]
+    public class ProductController : Controller
     {
-        private readonly IMovieRepo repo;
+        private readonly IMovieRepo _repo;
+        private readonly FileService _fileService;
 
-        public AdminController(IMovieRepo _repo)
+        public ProductController(IMovieRepo repo, FileService fileService)
         {
-            repo = _repo;
+            _repo = repo;
+            _fileService = fileService;
         }
 
         // ================= INDEX =================
         public IActionResult Index()
         {
-            var movies = repo.GetAll();
+            var movies = _repo.GetAll();
             return View(movies);
         }
 
@@ -29,8 +32,8 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         {
             var vm = new MovieVM
             {
-                Categories = repo.GetCategories(),
-                Actors = repo.GetActors()
+                Categories = _repo.GetCategories(),
+                Actors = _repo.GetActors()
             };
 
             return View(vm);
@@ -41,15 +44,12 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Please fix the errors";
-
-                vm.Categories = repo.GetCategories();
-                vm.Actors = repo.GetActors();
-
+                vm.Categories = _repo.GetCategories();
+                vm.Actors = _repo.GetActors();
                 return View(vm);
             }
 
-            var movie = new Movie
+            var movie = new Products
             {
                 Name = vm.Movie.Name,
                 Description = vm.Movie.Description,
@@ -59,34 +59,19 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
             };
 
             // Main Image
-            if (MainImg != null && MainImg.Length > 0)
-            {
-                var fileName = Guid.NewGuid() + Path.GetExtension(MainImg.FileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/movies", fileName);
+            if (MainImg != null)
+                movie.MainImg = _fileService.Upload(MainImg, ImgType.Main);
 
-                using (var stream = System.IO.File.Create(path))
-                {
-                    MainImg.CopyTo(stream);
-                }
-
-                movie.MainImg = fileName;
-            }
-
-            repo.Add(movie);
+            _repo.Add(movie);
 
             // Actors
             if (actorIds != null)
-            {
-                repo.AddActors(movie.Id, actorIds);
-            }
+                _repo.AddActors(movie.Id, actorIds);
 
             // Sub Images
             if (SubImgs != null)
-            {
-                repo.AddSubImages(movie.Id, SubImgs);
-            }
+                _repo.AddSubImages(movie.Id, SubImgs);
 
-            TempData["Success"] = "Movie added successfully!";
             return RedirectToAction("Index");
         }
 
@@ -95,15 +80,15 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var movie = repo.GetById(id);
-
+            var movie = _repo.GetById(id);
             if (movie == null) return NotFound();
 
             var vm = new MovieVM
             {
                 Movie = movie,
-                Categories = repo.GetCategories(),
-                Actors = repo.GetActors()
+                Categories = _repo.GetCategories(),
+                Actors = _repo.GetActors(),
+                SelectedActors = movie.MovieActors.Select(x => x.ActorId).ToList()
             };
 
             return View(vm);
@@ -114,17 +99,13 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Please fix the errors";
-
-                vm.Categories = repo.GetCategories();
-                vm.Actors = repo.GetActors();
-
+                vm.Categories = _repo.GetCategories();
+                vm.Actors = _repo.GetActors();
                 return View(vm);
             }
 
-            repo.Update(vm, MainImg, SubImgs, actorIds);
+            _repo.Update(vm, MainImg, SubImgs, actorIds);
 
-            TempData["Success"] = "Movie updated successfully!";
             return RedirectToAction("Index");
         }
 
@@ -132,13 +113,7 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
 
         public IActionResult Delete(int id)
         {
-            bool deleted = repo.Delete(id);
-
-            if (deleted)
-                TempData["Success"] = "Movie deleted successfully!";
-            else
-                TempData["Error"] = "Movie not found!";
-
+            _repo.Delete(id);
             return RedirectToAction("Index");
         }
     }

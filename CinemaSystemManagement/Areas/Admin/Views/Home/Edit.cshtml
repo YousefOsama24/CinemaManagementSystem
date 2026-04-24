@@ -1,8 +1,11 @@
 ﻿@model CinemaSystemManagement.Models.ViewModels.MovieVM
+<link href="~/css/admin-movie.css" rel="stylesheet" />
 
 <form method="post" enctype="multipart/form-data" class="container py-5">
 
     <input type="hidden" name="Movie.Id" value="@Model.Movie.Id" />
+
+    <h2>Edit Movie</h2>
 
     <input name="Movie.Name" value="@Model.Movie.Name" class="form-control mb-3" />
 
@@ -12,12 +15,26 @@
 
     <input name="Movie.Status" value="@Model.Movie.Status" class="form-control mb-3" />
 
-    <img src="/images/movies/@Model.Movie.MainImg" width="120" class="mb-3" />
-
+    <!-- Main Image -->
+    <img src="/images/movies/@Model.Movie.MainImg" width="150" class="mb-3" />
     <input type="file" name="MainImg" class="form-control mb-3" />
 
+    <!-- 🔥 عرض الصور الحالية -->
+    <label>Current Sub Images</label>
+    <div class="row mb-3">
+        @foreach (var img in Model.Movie.SubImages)
+        {
+            <div class="col-md-3">
+                <img src="/images/movies/sub/@img.ImageUrl" class="img-fluid rounded mb-2" />
+            </div>
+        }
+    </div>
+
+    <!-- Upload new -->
+    <label>Add New Sub Images</label>
     <input type="file" name="SubImgs" multiple class="form-control mb-3" />
 
+    <!-- Category -->
     <select name="Movie.CategoryId" class="form-control mb-3">
         @foreach (var c in Model.Categories)
         {
@@ -27,7 +44,16 @@
         }
     </select>
 
-   
-    <button class="btn btn-warning">Update</button>
+    <!-- Actors -->
+    <select name="actorIds" multiple class="form-control mb-3">
+        @foreach (var a in Model.Actors)
+        {
+            <option value="@a.Id" selected="@(Model.SelectedActors.Contains(a.Id))">
+                @a.Name
+            </option>
+        }
+    </select>
+
+    <button class="btn btn-warning w-100">Update</button>
 
 </form>

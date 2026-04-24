@@ -1,47 +1,45 @@
 ﻿@model List<CinemaSystemManagement.Models.Category>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-
-
+<link href="~/css/admin-movie.css" rel="stylesheet" />
 
 <div class="container py-5">
 
     <h2 class="text-center mb-5">🎭 Categories</h2>
 
-    <div class="category-container">
+    <div class="row g-4">
 
         @foreach (var cat in Model)
         {
             var img = cat.Movies.FirstOrDefault(m => m.MainImg != null)?.MainImg ?? "default.jpg";
 
-            <a asp-area="Customer"
-                   asp-controller="Home"
-                   asp-action="CategoryMovies"
-                   asp-route-id="@cat.Id">
+            <div class="col-lg-4 col-md-6 col-sm-12">
 
-                <div class="category-card">
+                <a asp-area="Customer"
+                       asp-controller="Home"
+                       asp-action="CategoryMovies"
+                       asp-route-id="@cat.Id">
 
-                    <div class="img-wrapper">
+                    <div class="movie-card">
+
                         <img src="/images/movies/@img"
-                             class="category-img"
-                             onerror="this.src='/images/default.jpg'" />
+                             onerror="this.src='/img/default.jpg'"
+                             class="movie-img" />
+
+                        <div class="movie-info text-center">
+                            <div class="movie-name">@cat.CategoryName</div>
+
+                            <div class="movie-btn">
+                                View Movies
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="overlay"></div>
+                </a>
 
-                    <div class="category-name">
-                        @cat.CategoryName
-                    </div>
-
-                </div>
-
-            </a>
+            </div>
         }
 
     </div>
 
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
