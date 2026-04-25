@@ -3,6 +3,8 @@
 <div class="container mt-5" style="max-width:500px;">
     <h2 class="text-center mb-4">Login</h2>
 
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
     <form method="post">
 
         <div class="mb-3">
@@ -24,6 +26,8 @@
 
     <div class="mt-3 text-center">
         <a asp-action="Register">Create Account</a> |
-        <a asp-action="ForgetPassword">Forgot Password?</a>
+        <a asp-action="ForgetPassword">Forgot Password?</a> |
+        <a asp-action="ResendEmailConfirmation">Resend Email Confirmation</a>
+
     </div>
 </div>

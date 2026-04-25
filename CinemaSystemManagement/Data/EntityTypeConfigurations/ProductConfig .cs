@@ -13,10 +13,10 @@ namespace CinemaSystemManagement.Data.EntityTypeConfigurations
                    .HasMaxLength(200);
 
             builder.Property(p => p.Price)
-                   .HasColumnType("decimal(10,2)");
+                   .HasColumnType("decimal(18,2)");
 
             builder.HasOne(p => p.Category)
-                   .WithMany(c => c.Movies)
+                   .WithMany(c => c.Products)
                    .HasForeignKey(p => p.CategoryId)
                    .OnDelete(DeleteBehavior.Cascade);
         }

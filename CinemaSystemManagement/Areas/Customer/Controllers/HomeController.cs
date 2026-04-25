@@ -74,7 +74,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
         public IActionResult Categories()
         {
             var categories = db.Categories
-                .Include(c => c.Movies)
+                .Include(c => c.Products)
                 .ToList();
 
             return View(categories);
@@ -105,7 +105,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
             return View(transactions);
         }
 
-        // ================== ADD TRANSACTION (SAFE) ==================
+        // ================== ADD TRANSACTION  ==================
         [HttpPost]
         public IActionResult AddTransaction(int id)
         {
@@ -128,7 +128,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
             return RedirectToAction("Transactions");
         }
 
-        // ================== DELETE TRANSACTION (SAFE) ==================
+        // ================== DELETE TRANSACTION  ==================
         [HttpPost]
         public IActionResult DeleteTransaction(int id)
         {

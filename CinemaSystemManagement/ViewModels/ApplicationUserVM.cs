@@ -5,6 +5,10 @@ namespace CinemaSystemManagement.ViewModels
 {
     public class ApplicationUserVM
     {
+        public string Id { get; set; }
+
+        public IFormFile? Image { get; set; }
+        public string? ProfileImage { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

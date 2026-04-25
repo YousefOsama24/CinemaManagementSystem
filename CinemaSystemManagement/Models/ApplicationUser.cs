@@ -9,6 +9,7 @@ namespace CinemaSystemManagement.Models
             public string LastName { get; set; } = string.Empty;
             public DateOnly DOB { get; set; }
             public string? Address { get; set; }
-        }
+        public string? ProfileImage { get; set; }
+    }
     
 }

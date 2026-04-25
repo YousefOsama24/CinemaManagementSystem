@@ -32,7 +32,6 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
         }
 
         // ================= REGISTER =================
-
         [HttpGet]
         public IActionResult Register() => View();
 
@@ -63,34 +62,30 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
 
             await SendConfirmationMailAsync(user);
 
-            TempData["success-notification"] = "Account created, check your email";
-
+            TempData["success-notification"] = "Account created, check your email ";
             return RedirectToAction(nameof(Login));
         }
 
         // ================= CONFIRM EMAIL =================
-
-        public async Task<IActionResult> Confirm(string token, string userId)
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
+            if (userId == null || token == null)
+                return Content("Invalid link ❌");
+
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
+
+            if (user == null)
+                return Content("User not found ❌");
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
 
-            if (!result.Succeeded)
-            {
-                TempData["error-notification"] =
-                    string.Join(", ", result.Errors.Select(e => e.Description));
+            if (result.Succeeded)
+                return Content("Email confirmed successfully ");
 
-                return RedirectToAction(nameof(Login));
-            }
-
-            TempData["success-notification"] = "Account Activated";
-            return RedirectToAction(nameof(Login));
+            return Content("Error confirming email ");
         }
 
         // ================= LOGIN =================
-
         [HttpGet]
         public IActionResult Login() => View();
 
@@ -109,6 +104,12 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
                 return View(vm);
             }
 
+            if (!user.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Please confirm your email first ");
+                return View(vm);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(
                 user, vm.Password, vm.RememberMe, true);
 
@@ -122,12 +123,13 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
                 return View(vm);
             }
 
+
             TempData["success-notification"] = $"Welcome {user.FirstName}";
-            return RedirectToAction("Index", "Home", new { area = "Customer" });
+            return RedirectToAction("Movie", "Home", new { area = "Customer" });
         }
 
-        // ================= RESEND EMAIL =================
 
+        // ================= RESEND EMAIL =================
         [HttpGet]
         public IActionResult ResendEmailConfirmation() => View();
 
@@ -137,18 +139,23 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            var user = await _userManager.FindByEmailAsync(vm.EmailOrUserName)
-                       ?? await _userManager.FindByNameAsync(vm.EmailOrUserName);
+            var user = _userManager.Users
+                .FirstOrDefault(u =>
+                    u.Email == vm.EmailOrUserName ||
+                    u.UserName == vm.EmailOrUserName);
 
-            if (user != null)
+            if (user != null && !user.EmailConfirmed)
+            {
                 await SendConfirmationMailAsync(user);
+            }
 
-            TempData["success-notification"] = "Email sent";
+            await Task.Delay(500);
+
+            TempData["success-notification"] = "check your email ";
+
             return RedirectToAction(nameof(Login));
         }
-
         // ================= FORGET PASSWORD =================
-
         [HttpGet]
         public IActionResult ForgetPassword() => View();
 
@@ -165,69 +172,47 @@ namespace CinemaSystemManagement.Areas.Identity.Controllers
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                TempData["token"] = token;
-                TempData["userId"] = user.Id;
+                var resetLink = Url.Action(
+                    "ChangePassword",
+                    "Account",
+                    new { userId = user.Id, token = token },
+                    Request.Scheme
+                );
+
+                var message = $@"
+                    <h2>Reset Password </h2>
+                    <p>Click the link below:</p>
+                    <a href='{resetLink}'>Reset Password</a>
+                ";
+
+                await _emailSender.SendEmailAsync(user.Email, "Reset Password", message);
             }
 
-            return RedirectToAction(nameof(ChangePassword));
-        }
-
-        // ================= CHANGE PASSWORD =================
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            if (TempData.Peek("userId") == null)
-                return RedirectToAction(nameof(Login));
-
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordVM vm)
-        {
-            if (!ModelState.IsValid)
-                return View(vm);
-
-            var userId = TempData["userId"]?.ToString();
-            var token = TempData["token"]?.ToString();
-
-            if (userId == null || token == null)
-                return RedirectToAction(nameof(Login));
-
-            var user = await _userManager.FindByIdAsync(userId);
-
-            var result = await _userManager.ResetPasswordAsync(user, token, vm.Password);
-
-            if (!result.Succeeded)
-            {
-                TempData["error-notification"] =
-                    string.Join(", ", result.Errors.Select(e => e.Description));
-
-                TempData["userId"] = userId;
-                TempData["token"] = token;
-
-                return View(vm);
-            }
-
-            TempData["success-notification"] = "Password changed";
+            TempData["success-notification"] = "Check your email ";
             return RedirectToAction(nameof(Login));
         }
 
-        // ================= PRIVATE =================
-
+       
+    
+        // ================= SEND CONFIRMATION =================
         private async Task SendConfirmationMailAsync(ApplicationUser user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var link = Url.Action("Confirm", "Account",
-                new { area = "Identity", token, userId = user.Id },
-                Request.Scheme);
+            var link = Url.Action(
+                "ConfirmEmail",
+                "Account",
+                new { userId = user.Id, token = token },
+                Request.Scheme
+            );
 
-            await _emailSender.SendEmailAsync(
-                user.Email,
-                "Confirm your account",
-                $"<h3>Click <a href='{link}'>here</a></h3>");
+            var message = $@"
+                <h2> Welcome</h2>
+                <p>Confirm your email:</p>
+                <a href='{link}'>Confirm Email</a>
+            ";
+
+            await _emailSender.SendEmailAsync(user.Email, "Confirm Email", message);
         }
     }
 }

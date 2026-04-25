@@ -17,7 +17,14 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
         }
 
         // ================= INDEX =================
+
         public IActionResult Index()
+        {
+            return View();
+        }
+        // ================= AdminMovie =================
+
+        public IActionResult AdminMovie()
         {
             var movies = repo.GetAll();
             return View(movies);

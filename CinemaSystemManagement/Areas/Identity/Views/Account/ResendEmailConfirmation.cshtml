@@ -1,35 +1,43 @@
 ﻿@model CinemaSystemManagement.ViewModels.ResendEmailConfirmationVM
 
 @{
-    ViewData["Title"] = "ResendEmailConfirmation";
+    ViewData["Title"] = "Resend Email Confirmation";
 }
 
-<div class="container my-3">
-    <h1>ResendEmailConfirmation</h1>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card shadow p-4" style="width: 400px;">
 
-    <h4>ResendEmailConfirmationVM</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-12">
-            <form asp-action="ResendEmailConfirmation">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="EmailOrUserName" class="control-label"></label>
-                    <input asp-for="EmailOrUserName" class="form-control" />
-                    <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
-                </div>
-                <div class="form-group mt-3">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
+        <h3 class="text-center mb-3">📧 Resend Confirmation</h3>
+
+        <p class="text-muted text-center">
+            Enter your email or username to resend the confirmation link.
+        </p>
+
+        <form asp-action="ResendEmailConfirmation" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-group">
+                <label asp-for="EmailOrUserName"></label>
+                <input asp-for="EmailOrUserName" class="form-control" placeholder="Enter Email or Username" />
+                <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3">
+                Resend Email 
+            </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="Login">Back to Login</a>
         </div>
-    </div>
 
-    <div>
-        <a asp-action="Login">Back to Login</a>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
