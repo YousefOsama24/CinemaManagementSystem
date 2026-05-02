@@ -37,6 +37,5 @@ namespace CinemaSystemManagement.Data
 
 
 
-
     }
 }

@@ -63,4 +63,10 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Movie}/{id?}"
 );
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DataSeeder.Seed(db);
+}
+
 app.Run();
