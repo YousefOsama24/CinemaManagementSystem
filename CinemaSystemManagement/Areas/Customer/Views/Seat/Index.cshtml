@@ -1,0 +1,60 @@
+﻿@model List<CinemaSystemManagement.Models.Seat>
+
+<style>
+    .seat {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+        background: #ccc;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .selected { background: red; }
+    .booked { background: black; }
+</style>
+
+<div class="container text-center mt-5">
+
+    <h3>Select Seats</h3>
+
+    <div>
+        @foreach (var s in Model)
+        {
+            <div class="seat @(s.IsBooked ? "booked" : "")"
+                 data-id="@s.Id"></div>
+        }
+    </div>
+
+    <form method="post" asp-action="Select">
+        <input type="hidden" name="selectedSeats" id="selectedSeats" />
+        <button class="btn btn-success mt-3">
+            Continue
+        </button>
+    </form>
+
+</div>
+
+<script>
+    let selected = [];
+
+    document.querySelectorAll(".seat").forEach(s => {
+
+        if (!s.classList.contains("booked")) {
+
+            s.onclick = () => {
+
+                s.classList.toggle("selected");
+
+                let id = s.dataset.id;
+
+                if (selected.includes(id))
+                    selected = selected.filter(x => x != id);
+                else
+                    selected.push(id);
+
+                document.getElementById("selectedSeats").value = selected.join(",");
+            };
+        }
+    });
+</script>

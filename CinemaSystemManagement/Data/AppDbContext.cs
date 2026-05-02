@@ -30,11 +30,13 @@ namespace CinemaSystemManagement.Data
         public DbSet<OrderDetails> OrderDetails { get; set; } 
         public DbSet<Order> Orders { get; set; } 
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Seat> Seats { get; set; }
 
-        
 
-        
 
-        
+
+
     }
 }

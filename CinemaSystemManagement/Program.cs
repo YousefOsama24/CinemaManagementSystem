@@ -35,6 +35,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Identity/Account/Logout";
 });
 
+Stripe.StripeConfiguration.ApiKey =
+    builder.Configuration["Stripe:SecretKey"];
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

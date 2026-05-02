@@ -4,9 +4,13 @@
     {
         public int Id { get; set; }
 
-        public double TotalPrice { get; set; }
+        public string UserId { get; set; }
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public decimal TotalPrice { get; set; }
+
+        public string Status { get; set; } = "Pending";
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public List<OrderDetails> OrderDetails { get; set; }
     }
