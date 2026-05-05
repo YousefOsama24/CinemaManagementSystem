@@ -4,14 +4,14 @@
     {
         public int Id { get; set; }
 
-        public string Title { get; set; } = string.Empty;
+        public string UserId { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public int ShowTimeId { get; set; }
+        public ShowTime ShowTime { get; set; }
 
-        public string Type { get; set; } = string.Empty; // Order, Success, Tracking
+        public int SeatId { get; set; }
+        public Seat Seat { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public string Status { get; set; } = "Pending";
+        public DateTime PurchaseDate { get; set; }
     }
 }

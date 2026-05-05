@@ -4,6 +4,7 @@ using CinemaSystemManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaSystemManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260505140831_AddShowTimeSeats")]
+    partial class AddShowTimeSeats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -355,9 +358,6 @@ namespace CinemaSystemManagement.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("ShowTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -388,9 +388,8 @@ namespace CinemaSystemManagement.Migrations
                     b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Row")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Row")
+                        .HasColumnType("int");
 
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
@@ -421,9 +420,6 @@ namespace CinemaSystemManagement.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
@@ -432,8 +428,6 @@ namespace CinemaSystemManagement.Migrations
                     b.HasIndex("CinemaId");
 
                     b.HasIndex("MovieId");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("ShowTimes");
                 });
@@ -745,10 +739,6 @@ namespace CinemaSystemManagement.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CinemaSystemManagement.Models.Products", null)
-                        .WithMany("ShowTimes")
-                        .HasForeignKey("ProductsId");
-
                     b.Navigation("Cinema");
 
                     b.Navigation("Movie");
@@ -868,8 +858,6 @@ namespace CinemaSystemManagement.Migrations
             modelBuilder.Entity("CinemaSystemManagement.Models.Products", b =>
                 {
                     b.Navigation("MovieActors");
-
-                    b.Navigation("ShowTimes");
 
                     b.Navigation("SubImages");
                 });

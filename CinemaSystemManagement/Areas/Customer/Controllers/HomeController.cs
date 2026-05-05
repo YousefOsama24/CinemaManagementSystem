@@ -62,7 +62,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
                 .Include(m => m.SubImages)
                 .Include(m => m.MovieActors)
                 .ThenInclude(ma => ma.Actor)
-                .FirstOrDefault(m => m.Id == id);
+                .FirstOrDefault(m => m.ProductsId == id);
 
             if (movie == null)
                 return NotFound();
@@ -105,7 +105,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
             return View(transactions);
         }
 
-        // ================== ADD TRANSACTION  ==================
+        // ================= ADD TRANSACTION =================
         [HttpPost]
         public IActionResult AddTransaction(int id)
         {

@@ -11,13 +11,41 @@ namespace CinemaSystemManagement.Data
         : base(options)
         {
         }
-       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+
+
+            modelBuilder.Entity<ShowTime>()
+    .HasOne(s => s.Movie)
+    .WithMany()
+    .HasForeignKey(s => s.MovieId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Seat>()
+    .HasOne(s => s.ShowTime)
+    .WithMany(st => st.Seats)
+    .HasForeignKey(s => s.ShowTimeId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MovieImage>()
+    .HasOne(m => m.Movie)
+    .WithMany(p => p.SubImages)
+    .HasForeignKey(m => m.MovieId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Ticket>()
+    .HasOne(t => t.ShowTime)
+    .WithMany()
+    .HasForeignKey(t => t.ShowTimeId)
+    .OnDelete(DeleteBehavior.Restrict);
         }
+
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
@@ -27,14 +55,13 @@ namespace CinemaSystemManagement.Data
         public DbSet<MovieImage> MovieImages { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<OrderDetails> OrderDetails { get; set; } 
-        public DbSet<Order> Orders { get; set; } 
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Seat> Seats { get; set; }
-
-
+        public DbSet<ShowTime> ShowTimes { get; set; }
 
 
     }

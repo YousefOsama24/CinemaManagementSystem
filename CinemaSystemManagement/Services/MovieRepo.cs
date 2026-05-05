@@ -31,7 +31,7 @@ namespace CinemaSystemManagement.Services
                 .Include(x => x.MovieActors)
                 .ThenInclude(ma => ma.Actor)
                 .Include(x => x.SubImages)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.ProductsId == id);
         }
 
         public void Add(Products movie)
@@ -72,7 +72,7 @@ namespace CinemaSystemManagement.Services
 
         public void Update(MovieVM vm, IFormFile MainImg, List<IFormFile> SubImgs, List<int> actorIds)
         {
-            var movie = GetById(vm.Movie.Id);
+            var movie = GetById(vm.Movie.ProductsId);
 
             movie.Name = vm.Movie.Name;
             movie.Description = vm.Movie.Description;
@@ -89,7 +89,7 @@ namespace CinemaSystemManagement.Services
             }
 
             // Update actors
-            var oldActors = _context.MovieActors.Where(x => x.MovieId == movie.Id);
+            var oldActors = _context.MovieActors.Where(x => x.MovieId == movie.ProductsId);
             _context.MovieActors.RemoveRange(oldActors);
 
             if (actorIds != null)
@@ -98,7 +98,7 @@ namespace CinemaSystemManagement.Services
                 {
                     _context.MovieActors.Add(new MovieActor
                     {
-                        MovieId = movie.Id,
+                        MovieId = movie.ProductsId,
                         ActorId = id
                     });
                 }
@@ -107,7 +107,7 @@ namespace CinemaSystemManagement.Services
             // Add sub images
             if (SubImgs != null)
             {
-                AddSubImages(movie.Id, SubImgs);
+                AddSubImages(movie.ProductsId, SubImgs);
             }
 
             _context.SaveChanges();

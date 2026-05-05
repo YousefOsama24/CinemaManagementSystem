@@ -1,9 +1,10 @@
 ﻿@model CinemaSystemManagement.Models.ViewModels.MovieVM
+
 <link href="~/css/admin-movie.css" rel="stylesheet" />
 
 <form method="post" enctype="multipart/form-data" class="container py-5">
 
-    <input type="hidden" name="Movie.Id" value="@Model.Movie.Id" />
+    <input type="hidden" name="Movie.Id" value="@Model.Movie.ProductsId" />
 
     <h2>Edit Movie</h2>
 
@@ -19,7 +20,7 @@
     <img src="/images/movies/@Model.Movie.MainImg" width="150" class="mb-3" />
     <input type="file" name="MainImg" class="form-control mb-3" />
 
-    <!-- 🔥 عرض الصور الحالية -->
+    <!-- Current Sub Images -->
     <label>Current Sub Images</label>
     <div class="row mb-3">
         @foreach (var img in Model.Movie.SubImages)
@@ -54,6 +55,14 @@
         }
     </select>
 
-    <button class="btn btn-warning w-100">Update</button>
+    <!-- 🔥 ShowTime -->
+    <hr />
+    <h4>Edit Show Time</h4>
+
+    <input name="StartTime" type="datetime-local" class="form-control mt-2" />
+
+    <input name="ShowPrice" type="number" class="form-control mt-2" />
+
+    <button class="btn btn-warning w-100 mt-4">Update</button>
 
 </form>

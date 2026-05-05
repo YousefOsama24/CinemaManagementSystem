@@ -6,9 +6,9 @@ namespace CinemaSystemManagement.Data
     {
         public static void Seed(AppDbContext context)
         {
-            if (context.Products.Any()) return; 
+            if (context.Products.Any()) return;
 
-            
+            // ================= CATEGORIES =================
             var categories = new List<Category>
             {
                 new Category { CategoryName = "Action" },
@@ -20,7 +20,7 @@ namespace CinemaSystemManagement.Data
             context.Categories.AddRange(categories);
             context.SaveChanges();
 
-            
+            // ================= ACTORS =================
             var actors = new List<Actor>
             {
                 new Actor { Name = "Leonardo DiCaprio", Img = "Leonardo_DiCaprio.jpg" },
@@ -33,7 +33,7 @@ namespace CinemaSystemManagement.Data
             context.Actors.AddRange(actors);
             context.SaveChanges();
 
-            
+            // ================= MOVIES =================
             var movies = new List<Products>
             {
                 new Products
@@ -65,31 +65,82 @@ namespace CinemaSystemManagement.Data
             context.Products.AddRange(movies);
             context.SaveChanges();
 
+            // ================= SHOW TIMES 🔥 =================
+            var shows = new List<ShowTime>
+            {
+                new ShowTime
+                {
+                    MovieId = movies[0].ProductsId,
+                    StartTime = DateTime.Now.AddHours(2),
+                    Price = 100
+                },
+                new ShowTime
+                {
+                    MovieId = movies[1].ProductsId,
+                    StartTime = DateTime.Now.AddHours(3),
+                    Price = 120
+                },
+                new ShowTime
+                {
+                    MovieId = movies[2].ProductsId,
+                    StartTime = DateTime.Now.AddHours(4),
+                    Price = 150
+                }
+            };
+
+            context.ShowTimes.AddRange(shows);
+            context.SaveChanges();
+
+            // ================= MOVIE ACTORS =================
             var movieActors = new List<MovieActor>
             {
-                new MovieActor { MovieId = movies[0].Id, ActorId = actors[0].Id },
-                new MovieActor { MovieId = movies[0].Id, ActorId = actors[1].Id },
+                new MovieActor { MovieId = movies[0].ProductsId, ActorId = actors[0].Id },
+                new MovieActor { MovieId = movies[0].ProductsId, ActorId = actors[1].Id },
 
-                new MovieActor { MovieId = movies[1].Id, ActorId = actors[3].Id },
+                new MovieActor { MovieId = movies[1].ProductsId, ActorId = actors[3].Id },
 
-                new MovieActor { MovieId = movies[2].Id, ActorId = actors[2].Id },
-                new MovieActor { MovieId = movies[2].Id, ActorId = actors[4].Id }
+                new MovieActor { MovieId = movies[2].ProductsId, ActorId = actors[2].Id },
+                new MovieActor { MovieId = movies[2].ProductsId, ActorId = actors[4].Id }
             };
 
             context.MovieActors.AddRange(movieActors);
-            context.SaveChanges();
 
+            // ================= IMAGES =================
             var images = new List<MovieImage>
             {
-                new MovieImage { MovieId  = movies[0].Id, ImageUrl = "move4.jpg" },
-                new MovieImage { MovieId  = movies[0].Id, ImageUrl = "move5.jpg" },
-
-                new MovieImage { MovieId  = movies[1].Id, ImageUrl = "move6.jpg" },
-
-                new MovieImage { MovieId  = movies[2].Id, ImageUrl = "move7.jpg" }
+                new MovieImage { MovieId = movies[0].ProductsId, ImageUrl = "move4.jpg" },
+                new MovieImage { MovieId = movies[0].ProductsId, ImageUrl = "move5.jpg" },
+                                                     
+                new MovieImage { MovieId = movies[1].ProductsId, ImageUrl = "move6.jpg" },
+                                                     
+                new MovieImage { MovieId = movies[2].ProductsId, ImageUrl = "move7.jpg" }
             };
 
             context.MovieImages.AddRange(images);
+
+            // ================= SEATS 🔥 =================
+            var seats = new List<Seat>();
+
+            foreach (var show in shows)
+            {
+                string[] rows = { "A", "B", "C", "D", "E" };
+
+                foreach (var row in rows)
+                {
+                    for (int i = 1; i <= 10; i++)
+                    {
+                        seats.Add(new Seat
+                        {
+                            Row = row,
+                            Number = i,
+                            ShowTimeId = show.Id
+                        });
+                    }
+                }
+            }
+
+            context.Seats.AddRange(seats);
+
             context.SaveChanges();
         }
     }

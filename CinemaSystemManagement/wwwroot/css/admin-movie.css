@@ -231,3 +231,57 @@ body {
     font-size: 13px;
     color: #64748b;
 }
+
+
+
+
+
+<style >
+.screen {
+    background: #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 60%;
+    font-weight: bold;
+}
+
+.seats-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    justify-content: center;
+}
+
+.seat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0ea5e9;
+    color: white;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .seat:hover {
+        transform: scale(1.1);
+    }
+
+    .seat input {
+        display: none;
+    }
+
+        /* Selected */
+        .seat input:checked + * {
+            background: green;
+        }
+
+    /* Booked */
+    .seat.booked {
+        background: #444;
+        cursor: not-allowed;
+    }
+
+</style >

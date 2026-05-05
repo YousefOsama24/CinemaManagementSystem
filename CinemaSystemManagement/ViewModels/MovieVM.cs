@@ -9,5 +9,8 @@ namespace CinemaSystemManagement.Models.ViewModels
         public List<Category> Categories { get; set; } = new();
         public List<Actor> Actors { get; set; } = new();
         public List<int> SelectedActors { get; internal set; } = new();
+
+        public DateTime StartTime { get; set; }
+        public decimal ShowPrice { get; set; }
     }
 }

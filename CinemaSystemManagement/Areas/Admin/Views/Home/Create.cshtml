@@ -1,13 +1,12 @@
 ﻿@model CinemaSystemManagement.Models.ViewModels.MovieVM
 
-
 <link href="~/css/admin-movie.css" rel="stylesheet" />
-
 
 <form method="post" enctype="multipart/form-data" class="container py-5">
 
     <h2>Add Movie</h2>
 
+    <!-- Movie Info -->
     <input name="Movie.Name" class="form-control mb-3" placeholder="Name" required />
 
     <textarea name="Movie.Description" class="form-control mb-3" placeholder="Description"></textarea>
@@ -40,6 +39,14 @@
         }
     </select>
 
-    <button class="btn btn-success w-100">Create</button>
+    <!-- 🔥 ShowTime -->
+    <hr />
+    <h4>Show Time</h4>
+
+    <input name="StartTime" type="datetime-local" class="form-control mt-2" />
+
+    <input name="ShowPrice" type="number" class="form-control mt-2" placeholder="Ticket Price" />
+
+    <button class="btn btn-success w-100 mt-4">Create</button>
 
 </form>

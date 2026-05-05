@@ -5,7 +5,7 @@ namespace CinemaSystemManagement.Models
 {
     public class Products
     {
-        public int Id { get; set; }
+        public int ProductsId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }= string.Empty;
@@ -20,7 +20,7 @@ namespace CinemaSystemManagement.Models
 
         public DateTime DateTime { get; set; }
 
-        public string MainImg { get; set; } = string.Empty;
+        public string MainImg { get; set; } 
 
         public List<MovieImage> SubImages { get; set; } = new();
 
@@ -31,5 +31,7 @@ namespace CinemaSystemManagement.Models
         public Cinema Cinema { get; set; }= new();
 
         public List<MovieActor> MovieActors { get; set; } = new();
+        public DateTime ShowTime { get; set; }
+        public List<ShowTime> ShowTimes { get; set; } = new();
     }
 }

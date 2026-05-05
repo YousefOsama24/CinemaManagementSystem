@@ -66,11 +66,11 @@ namespace CinemaSystemManagement.Areas.Admin.Controllers
 
             // Actors
             if (actorIds != null)
-                _repo.AddActors(movie.Id, actorIds);
+                _repo.AddActors(movie.ProductsId, actorIds);
 
             // Sub Images
             if (SubImgs != null)
-                _repo.AddSubImages(movie.Id, SubImgs);
+                _repo.AddSubImages(movie.ProductsId, SubImgs);
 
             return RedirectToAction("Index");
         }

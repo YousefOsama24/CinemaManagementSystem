@@ -16,7 +16,7 @@ namespace CinemaSystemManagement.Areas.Customer.Controllers
         public IActionResult Index(int movieId)
         {
             var seats = _context.Seats
-                .Where(s => s.MovieId == movieId)
+                .Where(s => s.ProductsId == movieId)
                 .ToList();
 
             return View(seats);

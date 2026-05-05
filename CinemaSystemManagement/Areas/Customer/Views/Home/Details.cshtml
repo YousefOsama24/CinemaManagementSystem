@@ -16,9 +16,29 @@
             <p><b>Price:</b> @Model.Price</p>
             <p><b>Category:</b> @Model.Category?.CategoryName</p>
 
-            <a href="/Home/AddTransaction?id=@Model.Id" class="btn btn-success">
-                Buy Now
-            </a>
+            <!-- 🔥 بدل Buy Now -->
+            <h4 class="mt-4">🎟 Choose ShowTime</h4>
+
+            @if (Model.ShowTimes != null && Model.ShowTimes.Any())
+            {
+                foreach (var show in Model.ShowTimes)
+                {
+                    <div class="mb-2">
+                        <a asp-area="Customer"
+                               asp-controller="Booking"
+                               asp-action="SelectSeat"
+                               asp-route-id="@show.Id"
+                               class="btn btn-primary">
+
+                            @show.StartTime.ToString("dd MMM hh:mm tt") - $@show.Price
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No showtimes available</p>
+            }
         </div>
 
     </div>
@@ -37,7 +57,7 @@
         }
     </div>
 
-    <!-- 🔥 Sub Images -->
+    <!-- Sub Images -->
     <h3>📸 More Images</h3>
 
     <div class="row">

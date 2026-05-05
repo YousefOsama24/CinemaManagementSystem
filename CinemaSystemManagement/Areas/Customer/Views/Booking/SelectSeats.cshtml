@@ -1,0 +1,40 @@
+﻿@model List<CinemaSystemManagement.Models.Seat>
+
+<div class="container mt-5 text-center">
+
+    <h2>🎟 Select Your Seats</h2>
+
+    <div class="screen mb-4">SCREEN</div>
+
+    <form method="post" asp-action="Checkout">
+
+        <div class="seats-grid">
+
+            @foreach (var seat in Model)
+            {
+                var css = "seat";
+
+                if (seat.IsBooked)
+                {
+                    css += " booked";
+                }
+
+                <label class="@css">
+                    <input type="checkbox"
+                           name="selectedSeats"
+                           value="@seat.Id"
+                    @(seat.IsBooked ? "disabled" : "") />
+
+                    @seat.Row@seat.Number
+                </label>
+            }
+
+        </div>
+
+        <button class="btn btn-success mt-4">
+            Continue to Payment 💳
+        </button>
+
+    </form>
+
+</div>
